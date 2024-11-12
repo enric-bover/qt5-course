@@ -11,7 +11,7 @@ Indicator::Indicator(QWidget *parent)
     lightsOn(true)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-    yellowActive = true;
+    //yellowActive = true;
 
     timer = new QTimer(this);
     timer->setInterval(300);

@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     indicator.cpp \
     main.cpp \
+    tank.cpp \
     widget.cpp
 
 HEADERS += \
     indicator.h \
+    tank.h \
     widget.h
 
 FORMS += \
