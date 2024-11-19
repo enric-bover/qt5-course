@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QLabel>
+#include <QColorDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -58,6 +59,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainToolBar->addWidget(ellipseButton);
     ui->mainToolBar->addWidget(eraseButton);
 
+    QString css = QString("background-color : %1").arg(canvas->getPenColor().name());
+    penColorButton->setStyleSheet(css);
+
+    css = QString("background-color : %1").arg(canvas->getFillColor().name());
+    fillColorButton->setStyleSheet(css);
 }
 
 MainWindow::~MainWindow()
@@ -73,6 +79,12 @@ void MainWindow::penWidthChanged(int width)
 void MainWindow::changePenColor()
 {
 
+    QColor color = QColorDialog::getColor(canvas->getPenColor());
+    if(color.isValid()){
+        canvas->setPenColor(color);
+        QString css = QString("background-color : %1").arg(color.name());
+        penColorButton->setStyleSheet(css);
+    }
 }
 
 void MainWindow::changeFillColor()
