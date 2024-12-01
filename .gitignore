@@ -12,3 +12,5 @@ build-3-10ShapeMakerDemo-5_15_2_static-Debug
 build-4-5ClipboardDemo-QTSTATIC-Debug
 5-1QListWidgetDemo/.qtc_clangd
 build*
+*.qtc_clangd*
+*debug*
