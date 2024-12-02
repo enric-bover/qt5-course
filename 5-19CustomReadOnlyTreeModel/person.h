@@ -10,7 +10,7 @@ class Person
 public:
     Person(QString names, QString proffession, Person * parent = nullptr);
     ~Person();
-    void appendChild(Person * child);
+    void appendChild(Person * childParam);
     Person * child(int row);
     int childCount() const;
     QVariant data(int column) const;
