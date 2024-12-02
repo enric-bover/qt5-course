@@ -24,7 +24,7 @@ void StarDelegate::commitAndCloseEditor()
 
 QWidget *StarDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.column() == 2){
+    if(index.column() == 3){
         int starRating = index.data().toInt();
         StarEditor* editor = new StarEditor(parent);
         editor->setStarRating(starRating);
@@ -40,7 +40,7 @@ QWidget *StarDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
 
 void StarDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    if(index.column() == 2){
+    if(index.column() == 3){
         int starRating = index.data().toInt();
         StarEditor* starEditor = qobject_cast<StarEditor*>(editor);
         starEditor->setStarRating(starRating);
@@ -52,7 +52,7 @@ void StarDelegate::setEditorData(QWidget *editor, const QModelIndex &index) cons
 
 void StarDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    if(index.column() == 2){
+    if(index.column() == 3){
         StarEditor* starEditor = qobject_cast<StarEditor*>(editor);
         model->setData(index, QVariant::fromValue(starEditor->getStarRating()), Qt::EditRole);
 
@@ -64,7 +64,7 @@ void StarDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, cons
 
 void StarDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.column() == 2){
+    if(index.column() == 3){
         QRect rect = option.rect.adjusted(10,10,-10,-10);
         int starNumber = index.data().toInt();
 

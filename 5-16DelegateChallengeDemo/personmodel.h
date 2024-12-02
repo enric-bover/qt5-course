@@ -16,7 +16,8 @@ public:
     enum PersonRoles{
         NamesRole = Qt::UserRole +1,
         FavoriteColorRole,
-        AgeRole
+        AgeRole,
+        SocialScoreRole
     };
     explicit PersonModel(QObject *parent = nullptr);
     ~PersonModel() override;
@@ -29,7 +30,7 @@ public:
 
     void addPerson(Person * person);
     void addPerson();
-    void addPerson(const QString & names, const int &age);
+    void addPerson(const QString & names, const int &age, const int &socialScore);
     void removePerson(QModelIndex index);
 
 signals:

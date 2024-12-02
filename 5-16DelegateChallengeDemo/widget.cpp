@@ -3,6 +3,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include "persondelegate.h"
+#include "stardelegate.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -11,11 +12,14 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
     PersonDelegate * personDelegate = new PersonDelegate(this);
+    StarDelegate * starDelegate = new StarDelegate(this);
     model = new PersonModel(this);
 
     ui->listView->setModel(model);
     ui->tableView->setModel(model);
     ui->tableView->setItemDelegateForColumn(2, personDelegate);
+    ui->tableView->setItemDelegateForColumn(3, starDelegate);
+
     ui->treeView->setModel(model);
     ui->treeView->setItemDelegate(personDelegate);
 
@@ -38,7 +42,7 @@ void Widget::on_addPersonButton_clicked()
     if (ok && !name.isEmpty()){
         int age = QInputDialog::getInt(nullptr, "Person Age", "Age",20,15,120);
 
-        Person * person = new Person(name, "blue", age, this);
+        Person * person = new Person(name, "blue", age, 3,this);
 
         model->addPerson(person);
     }

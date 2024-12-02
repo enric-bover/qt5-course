@@ -4,10 +4,10 @@
 PersonModel::PersonModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
-    persons.append(new Person("Jamie Lannister", "red", 33));
-    persons.append(new Person("Enric Bover", "yellow", 27));
-    persons.append(new Person("Paula Salas", "blue", 27));
-    persons.append(new Person("Judit Tomas", "green", 34));
+    persons.append(new Person("Jamie Lannister", "red", 33, 4));
+    persons.append(new Person("Enric Bover", "yellow", 27, 3));
+    persons.append(new Person("Paula Salas", "blue", 27, 2));
+    persons.append(new Person("Judit Tomas", "green", 34, 1));
 
 }
 
@@ -41,6 +41,9 @@ QVariant PersonModel::data(const QModelIndex &index, int role) const
         if(index.column() == 2){
             return person->favoriteColor();
         }
+        if(index.column() == 3){
+            return person->socialScore();
+        }
 
     }
 
@@ -58,6 +61,10 @@ QVariant PersonModel::data(const QModelIndex &index, int role) const
 
     if(role == AgeRole){
         return person->age();
+    }
+
+    if(role == SocialScoreRole){
+        return person->socialScore();
     }
 
     return QVariant();
@@ -95,6 +102,14 @@ bool PersonModel::setData(const QModelIndex &index, const QVariant &value, int r
             //favorite color
             if(person->favoriteColor() != value.toString()){
                 person->setFavoriteColor(value.toString());
+                somethingChanged = true;
+            }
+        }
+
+        if(index.column() == 3){
+            //scoail score
+            if(person->socialScore() != value.toInt()){
+                person->setSocialScore(value.toInt());
                 somethingChanged = true;
             }
         }
@@ -165,7 +180,13 @@ QVariant PersonModel::headerData(int section, Qt::Orientation orientation, int r
         case 2:
             return QString("Favtorite Color");
             break;
+
+        case 3:
+            return QString("Social Score");
+            break;
         }
+
+
 
     }
 
@@ -196,13 +217,13 @@ void PersonModel::addPerson(Person *person)
 
 void PersonModel::addPerson()
 {
-    Person * person = new Person("Added Person", "yellowgreen", 45, this);
+    Person * person = new Person("Added Person", "yellowgreen", 45, 4, this);
     addPerson(person);
 }
 
-void PersonModel::addPerson(const QString &names, const int &age)
+void PersonModel::addPerson(const QString &names, const int &age, const int &socialScore)
 {
-    Person * person = new Person(names, "yellowgreen", age);
+    Person * person = new Person(names, "yellowgreen", age, socialScore);
     addPerson(person);
 
 }
@@ -251,6 +272,7 @@ QHash<int, QByteArray> PersonModel::roleNames() const
     roles[NamesRole] = "names";
     roles[FavoriteColorRole] = "favoritecolor";
     roles[AgeRole] = "age";
+    roles[SocialScoreRole] = "socialscore";
 
     return roles;
 
@@ -260,7 +282,7 @@ QHash<int, QByteArray> PersonModel::roleNames() const
 int PersonModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 3; //
+    return 4; //
 }
 
 

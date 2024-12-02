@@ -9,7 +9,7 @@ class Person : public QObject
 public:
     explicit Person(QObject *parent = nullptr);
     Person(const QString &names, const QString &favoritecolor,
-           const int &age, QObject * parent = nullptr);
+           const int &age, const int & socialScore, QObject * parent = nullptr);
 
     QString names() const;
     QString favoriteColor() const;
@@ -17,6 +17,9 @@ public:
     void setNames(QString names);
     void setFavoriteColor(QString favoriteColor);
     void setAge(int age);
+
+    int socialScore() const;
+    void setSocialScore(int newSocialScore);
 
 signals:
     void namesChanged(QString names);
@@ -28,6 +31,7 @@ private:
     QString m_names;
     QString m_favoriteColor;
     int m_age;
+    int m_socialScore;
 };
 
 #endif // PERSON_H

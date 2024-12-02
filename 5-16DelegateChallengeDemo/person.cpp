@@ -7,8 +7,8 @@ Person::Person(QObject *parent)
 
 }
 
-Person::Person(const QString &names, const QString &favoritecolor, const int &age, QObject *parent) :
-    QObject(parent),m_names(names),m_favoriteColor(favoritecolor),m_age(age)
+Person::Person(const QString &names, const QString &favoritecolor, const int &age, const int &socialScore, QObject *parent) :
+    QObject(parent),m_names(names),m_favoriteColor(favoritecolor),m_age(age), m_socialScore(socialScore)
 {
 
 }
@@ -56,4 +56,16 @@ void Person::setAge(int age)
 
     m_age = age;
     emit ageChanged(m_age);
+}
+
+int Person::socialScore() const
+{
+    return m_socialScore;
+}
+
+void Person::setSocialScore(int newSocialScore)
+{
+    if(m_socialScore == newSocialScore)
+        return;
+    m_socialScore = newSocialScore;
 }
