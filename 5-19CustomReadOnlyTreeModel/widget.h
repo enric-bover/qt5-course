@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include "person.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -15,7 +16,13 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+private slots:
+
+
+
 private:
     Ui::Widget *ui;
+
+
 };
 #endif // WIDGET_H

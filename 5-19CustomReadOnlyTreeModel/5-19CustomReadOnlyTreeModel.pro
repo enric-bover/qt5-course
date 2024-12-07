@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     person.cpp \
+    personmodel.cpp \
     widget.cpp
 
 HEADERS += \
     person.h \
+    personmodel.h \
     widget.h
 
 FORMS += \

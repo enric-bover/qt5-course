@@ -1,4 +1,5 @@
 #include "person.h"
+#include <QDebug>
 
 Person::Person(QString names, QString proffession, Person *parent)
 {
@@ -42,14 +43,20 @@ int Person::row() const
     if(parent){
         parent->children.indexOf(const_cast<Person*>(this));
     }
+
+    return 0;
 }
 
 Person *Person::parentPerson()
 {
-
+    return parent;
 }
 
 void Person::showInfo()
 {
+    qDebug() << "Person : " << names << " " << proffession << "(" << childCount() << " children)";
 
+    foreach(Person * child, children){
+        child->showInfo();
+    }
 }
