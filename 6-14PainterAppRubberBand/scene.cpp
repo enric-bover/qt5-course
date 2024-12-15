@@ -12,8 +12,12 @@
 Scene::Scene(QObject *parent) : QGraphicsScene(parent),
     tool(Cursor),
     drawing(false),
+    lineGroup(nullptr),
     lastEraserCircle(nullptr),
-    lastItem (nullptr)
+    lastItem (nullptr),
+    penColor(Qt::black),
+    penWidth(2),
+    penStyle(Qt::SolidLine)
 {
     horGuideLine =  addLine(-400,0,400,0,QPen(Qt::blue));
     verGuideLine = addLine(0,-400,0,400,QPen(Qt::blue));
@@ -36,6 +40,10 @@ void Scene::dropEvent(QGraphicsSceneDragDropEvent *event)
 
         int key = event->mimeData()->property("Key").toInt();
 
+        QPen mPen;
+        mPen.setColor(penColor);
+        mPen.setWidth(penWidth);
+        mPen.setStyle(penStyle);
 
         switch (key) {
         case 10:{
@@ -44,6 +52,7 @@ void Scene::dropEvent(QGraphicsSceneDragDropEvent *event)
             ellipse->setRect(0,0,80,50);
             ellipse->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
             ellipse->setBrush(Qt::gray);
+            ellipse->setPen(mPen);
             addItem(ellipse);
 
             ellipse->setPos(event->scenePos() -QPointF((ellipse->boundingRect().width()/2),
@@ -55,6 +64,8 @@ void Scene::dropEvent(QGraphicsSceneDragDropEvent *event)
             //Qt Quick Image
             ResizablePixmapItem * pixItem = new ResizablePixmapItem(QPixmap(":/images/quick.png"));
             pixItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+            pixItem->setPen(mPen);
+
             addItem(pixItem);
             pixItem->setPos(event->scenePos() -QPointF((pixItem->boundingRect().width()/2),
                                                        (pixItem->boundingRect().height()/2))) ;
@@ -66,6 +77,8 @@ void Scene::dropEvent(QGraphicsSceneDragDropEvent *event)
             rectItem->setRect(0,0,80,50);
             rectItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
             rectItem->setBrush(Qt::gray);
+            rectItem->setPen(mPen);
+
             addItem(rectItem);
             rectItem->setPos(event->scenePos() -QPointF((rectItem->boundingRect().width()/2),
                                                         (rectItem->boundingRect().height()/2))) ;
@@ -76,6 +89,7 @@ void Scene::dropEvent(QGraphicsSceneDragDropEvent *event)
             ResizableStarItem * starItem = new ResizableStarItem();
             starItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
             starItem->setBrush(Qt::gray);
+            starItem->setPen(mPen);
             addItem(starItem);
             starItem->setPos(event->scenePos() -QPointF((starItem->boundingRect().width()/2),
                                                         (starItem->boundingRect().height()/2))) ;
@@ -127,6 +141,12 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+
+    QPen mPen;
+    mPen.setColor(penColor);
+    mPen.setWidth(penWidth);
+    mPen.setStyle(penStyle);
+
     if((event->button() == Qt::LeftButton) && drawing){
 
         if(lastItem && ((tool == Rect)
@@ -157,6 +177,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             mRect->setRect(QRectF(startingPoint,event->scenePos()).normalized());
             mRect->setBrush(Qt::blue);
             mRect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+            mRect->setPen(mPen);
             addItem(mRect);
             lastItem = nullptr;
             drawing = false;
@@ -168,6 +189,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             ellipseItem->setRect(QRectF(startingPoint,event->scenePos()).normalized());
             ellipseItem->setBrush(Qt::blue);
             ellipseItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+            ellipseItem->setPen(mPen);
             addItem(ellipseItem);
             lastItem = nullptr;
             drawing = false;
@@ -179,6 +201,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             starItem->setRect(QRectF(startingPoint,event->scenePos()).normalized());
             starItem->setBrush(Qt::blue);
             starItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+            starItem->setPen(mPen);
             addItem(starItem);
             lastItem = nullptr;
             drawing = false;
@@ -213,8 +236,8 @@ void Scene::drawLineTo(const QPointF &endPoint)
 
     QGraphicsLineItem  *localLine = new QGraphicsLineItem(QLineF(lastPenPoint,endPoint));
     QPen mPen;
-    mPen.setWidth(3);
-    mPen.setColor(Qt::green);
+    mPen.setWidth(penWidth);
+    mPen.setColor(penColor);
     localLine->setPen(mPen);
     lineGroup->addToGroup(localLine);
 
@@ -270,12 +293,19 @@ void Scene::drawShapeTo(const QPointF &endPoint)
         delete lastItem;
     }
 
+    QPen mPen;
+    mPen.setColor(penColor);
+    mPen.setWidth(penWidth);
+    mPen.setStyle(penStyle);
+
+
     QRectF itemRect(startingPoint,endPoint);
 
     if(tool == Rect){
         ResizableRectItem * mRect = new ResizableRectItem();
         mRect->setRect(itemRect.normalized());
         mRect->setBrush(Qt::blue);
+        mRect->setPen(mPen);
         addItem(mRect);
         mRect->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
         lastItem = mRect;
@@ -285,6 +315,7 @@ void Scene::drawShapeTo(const QPointF &endPoint)
         ResizableEllipseItem * ellipseItem = new ResizableEllipseItem();
         ellipseItem->setRect(itemRect.normalized());
         ellipseItem->setBrush(Qt::blue);
+        ellipseItem->setPen(mPen);
         addItem(ellipseItem);
         ellipseItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
         lastItem = ellipseItem;
@@ -293,10 +324,41 @@ void Scene::drawShapeTo(const QPointF &endPoint)
         ResizableStarItem * starItem = new ResizableStarItem();
         starItem->setRect(itemRect.normalized());
         starItem->setBrush(Qt::blue);
+        starItem->setPen(mPen);
         addItem(starItem);
         starItem->setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
         lastItem = starItem;
     }
+}
+
+Qt::PenStyle Scene::getPenStyle() const
+{
+    return penStyle;
+}
+
+void Scene::setPenStyle(Qt::PenStyle newPenStyle)
+{
+    penStyle = newPenStyle;
+}
+
+int Scene::getPenWidth() const
+{
+    return penWidth;
+}
+
+void Scene::setPenWidth(int newPenWidth)
+{
+    penWidth = newPenWidth;
+}
+
+QColor Scene::getPenColor() const
+{
+    return penColor;
+}
+
+void Scene::setPenColor(const QColor &newPenColor)
+{
+    penColor = newPenColor;
 }
 
 Scene::ToolType Scene::getTool() const

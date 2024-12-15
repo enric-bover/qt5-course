@@ -34,6 +34,7 @@ void ResizableStarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     Q_UNUSED(option);
     Q_UNUSED(widget);
     painter->save();
+    painter->setPen(pen());
 
     painter->setBrush(brush());
 

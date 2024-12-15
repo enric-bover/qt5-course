@@ -23,6 +23,7 @@ void ResizableRectItem::paint(QPainter *painter,
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    painter->setPen(pen());
 
     painter->setBrush(brush());
     painter->drawRect(rect());

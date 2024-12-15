@@ -36,6 +36,26 @@ private slots:
 
     void on_actionAdd_Image_triggered();
 
+    void on_actionSave_triggered();
+
+    void on_actionLoad_triggered();
+
+    void on_actionCopy_triggered();
+
+    void on_actionCut_triggered();
+
+    void on_actionPaste_triggered();
+
+    void on_actionUndo_triggered();
+
+    void on_actionRedo_triggered();
+
+    void on_penColorButton_clicked();
+
+    void on_penWidthSpinBox_valueChanged(int arg1);
+
+    void on_penStyleComboBox_activated(int index);
+
 private:
     Ui::MainWindow *ui;
     Scene * scene;

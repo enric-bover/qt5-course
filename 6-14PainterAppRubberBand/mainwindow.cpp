@@ -3,7 +3,8 @@
 #include "view.h"
 #include <QFileDialog>
 #include "shapelist.h"
-#include "colorlistwidget.h"
+#include <QColorDialog>
+#include "colorpicker.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,41 +15,63 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new Scene(this);
 
-       ShapeList * shapeList = new ShapeList(this);
-       shapeMap.insert(10, "Ellipse");
-       shapeMap.insert(20, "Quick");
-       shapeMap.insert(30, "Rectangle");
-       shapeMap.insert(40, "Star");
+    ShapeList * shapeList = new ShapeList(this);
+    shapeMap.insert(10, "Ellipse");
+    shapeMap.insert(20, "Quick");
+    shapeMap.insert(30, "Rectangle");
+    shapeMap.insert(40, "Star");
 
-       foreach (int key, shapeMap.keys()) {
-           QListWidgetItem * item = new QListWidgetItem(shapeMap[key],shapeList);
-           QString filename = ":/images/" + shapeMap[key].toLower()+".png";
-           item->setIcon(QIcon(filename));
-           item->setData(Qt::UserRole,key);
+    foreach (int key, shapeMap.keys()) {
+        QListWidgetItem * item = new QListWidgetItem(shapeMap[key],shapeList);
+        QString filename = ":/images/" + shapeMap[key].toLower()+".png";
+        item->setIcon(QIcon(filename));
+        item->setData(Qt::UserRole,key);
 
-       }
+    }
 
-       ColorListWidget * colorList = new ColorListWidget(this);
-       colorList->addItems(QColor::colorNames());
+    //       ColorListWidget * colorList = new ColorListWidget(this);
+    //       colorList->addItems(QColor::colorNames());
 
-       QStringList colors = QColor::colorNames();
+    //       QStringList colors = QColor::colorNames();
 
-       for( int i = 0 ; i < colors.size(); i++){
-           QPixmap mPix(40,40);
-           mPix.fill(colors[i]);
-           QIcon icon;
-           icon.addPixmap(mPix);
-           colorList->item(i)->setIcon(icon);
+    //       for( int i = 0 ; i < colors.size(); i++){
+    //           QPixmap mPix(40,40);
+    //           mPix.fill(colors[i]);
+    //           QIcon icon;
+    //           icon.addPixmap(mPix);
+    //           colorList->item(i)->setIcon(icon);
 
-       }
+    //       }
 
-       View * view = new View(this);
-       view->setScene(scene);
+    ColorPicker * colorPicker = new ColorPicker(this);
+    QObject::connect(colorPicker, &ColorPicker::colorChanged,[=](QColor color){
+        scene->setPenColor(color);
+        ui->penColorButton->setStyleSheet(QString("background-color: %1").arg(scene->getPenColor().name()));
+    });
 
 
-        ui->listLayout->addWidget(shapeList);
-        ui->listLayout->addWidget(colorList);
-        ui->viewLayout->addWidget(view);
+    View * view = new View(this);
+    view->setScene(scene);
+
+    ui->colorPickerLayout->addWidget(colorPicker);
+
+
+    ui->listLayout->addWidget(shapeList);
+    //ui->listLayout->addWidget(colorList);
+    ui->viewLayout->addWidget(view);
+
+    QString colorQss = QString("background-color: %1").arg(scene->getPenColor().name());
+    ui->penColorButton->setStyleSheet(colorQss);
+
+    //
+
+    ui->penStyleComboBox->addItem(QIcon(":/images/pen_style_solid.png"), "Solid");
+    ui->penStyleComboBox->addItem(QIcon(":/images/pen_style_dashed.png"), "Dashed");
+    ui->penStyleComboBox->addItem(QIcon(":/images/pen_style_dotted.png"), "Dotted");
+    ui->penStyleComboBox->addItem(QIcon(":/images/pen_style_dot_dashed.png"), "Dot Dashed");
+
+    ui->penWidthSpinBox->setValue(scene->getPenWidth());
+
 }
 
 MainWindow::~MainWindow()
@@ -114,3 +137,88 @@ void MainWindow::on_actionAdd_Image_triggered()
     scene->addImageItem(fileName);
 
 }
+
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionLoad_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionCopy_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionCut_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionPaste_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionUndo_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionRedo_triggered()
+{
+
+}
+
+
+void MainWindow::on_penColorButton_clicked()
+{
+    QColor color = QColorDialog::getColor(Qt::black, this);
+
+    if(color.isValid()){
+        scene->setPenColor(color);
+        QString colorQss = QString("background-color: %1").arg(color.name());
+        ui->penColorButton->setStyleSheet(colorQss);
+    }
+}
+
+
+void MainWindow::on_penWidthSpinBox_valueChanged(int arg1)
+{
+    scene->setPenWidth(arg1);
+}
+
+
+void MainWindow::on_penStyleComboBox_activated(int index)
+{
+
+    switch (index) {
+    case 0://solid
+        scene->setPenStyle(Qt::SolidLine);
+        break;
+    case 1://dash
+        scene->setPenStyle(Qt::DashLine);
+
+        break;
+    case 2://dotted
+        scene->setPenStyle(Qt::DotLine);
+
+        break;
+    case 3://dash dotted
+        scene->setPenStyle(Qt::DashDotLine);
+
+        break;
+    default:
+        break;
+    }
+}
+

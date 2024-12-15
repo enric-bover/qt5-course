@@ -21,6 +21,7 @@ void ResizableEllipseItem::paint(QPainter *painter,
     Q_UNUSED(widget);
 
     painter->save();
+    painter->setPen(pen());
     painter->setBrush(brush());
     painter->drawEllipse(rect());
 

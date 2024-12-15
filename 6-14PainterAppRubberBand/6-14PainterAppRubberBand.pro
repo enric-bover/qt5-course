@@ -26,6 +26,8 @@ CONFIG += c++11
 
 SOURCES += \
         colorlistwidget.cpp \
+        colorpicker.cpp \
+        doubleclickbutton.cpp \
         handleitem.cpp \
         main.cpp \
         mainwindow.cpp \
@@ -40,6 +42,8 @@ SOURCES += \
 
 HEADERS += \
         colorlistwidget.h \
+        colorpicker.h \
+        doubleclickbutton.h \
         handleitem.h \
         mainwindow.h \
         resizableellipseitem.h \
