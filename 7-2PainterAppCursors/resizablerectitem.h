@@ -26,4 +26,12 @@ protected:
 
 };
 
+//write
+QDataStream &operator<<(QDataStream &out,
+                        const ResizableRectItem & mRect);
+
+//read
+QDataStream &operator>>(QDataStream &in,
+                         ResizableRectItem & mRectItem);
+
 #endif // RESIZABLERECTITEM_H

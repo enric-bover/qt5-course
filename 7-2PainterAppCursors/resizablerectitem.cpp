@@ -61,6 +61,34 @@ void ResizableRectItem::dropEvent(QGraphicsSceneDragDropEvent *event)
       }
 }
 
+QDataStream &operator<<(QDataStream &out, const ResizableRectItem & mRect){
+
+      qreal x = mRect.selectorFrameBounds().x();
+      qreal y = mRect.selectorFrameBounds().x();
+
+      qreal width = mRect.selectorFrameBounds().width();
+      qreal height = mRect.selectorFrameBounds().height();
+
+      qreal posX = mRect.scenePos().x();
+      qreal posY = mRect.scenePos().y();
+
+      QColor brushColor = mRect.brush().color();
+      QPen mPen = mRect.pen();
+
+      out << x << y << width << height << posX << posY << brushColor.red()
+          << brushColor.green() << brushColor.blue() <<
+          mPen.color().red() << mPen.color().green() << mPen.color().blue() <<
+          static_cast<int>(mPen.style()) << mPen.width();
+
+      return out;
+
+
+}
+
+QDataStream &operator>>(QDataStream &in, ResizableRectItem & mRectItem){
+
+}
+
 
 
 
